@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+using namespace std;
+void dfs(int s,vector<int>g[],stack<int>&st,vector<int>&v)
+{
+    v[s]=1;
+    for(auto child:g[s])
+    {
+        if(!v[child])
+        {
+            v[child]=1;
+            dfs(child,g,st,v);
+        }
+        st.push(s);
+    }
+}
+void rdfs(int s,vector<int>rg[],vector<int>&v)
+{
+    cout<<s;
+    v[s]=1;
+    for(auto child:rg[s])
+    {
+        if(!v[child])
+        {
+            rdfs(child,rg,v);
+        }
+    }
+}
+int main() {
+    int n,m;
+    cin>>n>>m;
+    vector<int>g[n];
+    for(int i=0;i<m;i++)
+    { 
+        int u,v;
+        cin>>u>>v;
+        g[u].push_back(v);
+    }
+    vector<int>v(n,0);
+    stack<int>st;
+    for(int i=0;i<n;i++)
+    {
+        if(!v[i])
+        {
+            dfs(i,g,st,v);
+        }
+    }
+    vector<int>rg[n];
+    for(int i=0;i<n;i++)
+    {    
+        v[i]=0;
+        for(auto child:g[i])
+        {
+          rg[child].push_back(i);
+        }
+    }
+    while(!st.empty())
+    {
+        int node=st.top();
+        st.pop();
+        if(!v[node])
+        {  
+            cout<<"SCC:-";
+            rdfs(node,rg,v);
+            cout<<endl;
+        }
+    }
+    
+
+    
+}
+
+
+/*
+5 5 
+0 1 
+1 2 
+2 0 
+1 3 
+3 4 */
